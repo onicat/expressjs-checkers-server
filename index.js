@@ -33,7 +33,15 @@ app.ws('/', function(ws, req) {
       case 'JOIN': {
         const room = rooms.get(payload.id);
 
-        room[PLAYERS_TAGS.PLAYER2] = ws;
+        if (room === undefined || room[PLAYERS_TAGS.PLAYER2] !== null) {
+          ws.close(
+            1000,
+            'The room with the specified id is full or does not exist'
+          )
+        } else {
+          room[PLAYERS_TAGS.PLAYER2] = ws;
+        }
+        
         break;
       }
     }
