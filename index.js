@@ -29,6 +29,13 @@ app.ws('/', function(ws, req) {
         ws.send(responseActions.sendRoomId(room.id));
         break;
       }
+
+      case 'JOIN': {
+        const room = rooms.get(payload.id);
+
+        room[PLAYERS_TAGS.PLAYER2] = ws;
+        break;
+      }
     }
   });
 });
