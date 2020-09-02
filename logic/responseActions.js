@@ -5,6 +5,13 @@ class RequestActions {
       payload: {id}
     });
   }
+
+  gameReady() {
+    return JSON.stringify({
+      type: 'GAME_READY',
+      payload: null
+    });
+  }
 }
 
 module.exports = new RequestActions();
