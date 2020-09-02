@@ -1,4 +1,11 @@
 class RequestActions {
+  roomCreated(id) {
+    return JSON.stringify({
+      type: 'ROOM_CREATED',
+      payload: {id}
+    });
+  }
+  
   sendRoomId(id) {
     return JSON.stringify({
       type: 'SEND_ROOM_ID',
