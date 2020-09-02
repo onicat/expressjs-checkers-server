@@ -26,7 +26,7 @@ app.ws('/', function(ws, req) {
 
         room[PLAYERS_TAGS.PLAYER1] = ws;
 
-        ws.send(responseActions.roomCreated(room.id));
+        ws.send(responseActions.sendRoomId(room.id));
         break;
       }
 
