@@ -41,8 +41,6 @@ app.ws('/', function(ws, req) {
         } else {
           room[PLAYERS_TAGS.PLAYER2] = ws;
 
-          ws.send(responseActions.sendRoomId(room.id));
-
           room[PLAYERS_TAGS.PLAYER1].send(responseActions.gameReady());
           room[PLAYERS_TAGS.PLAYER2].send(responseActions.gameReady());
         }
