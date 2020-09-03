@@ -21,6 +21,14 @@ class Room {
       playerSocket.send(action);
     }
   }
+
+  sendToOtherPlayers(excludeName, action) {
+    for (let [playerName, playerSocket] of this.players.entries()) {
+      if (playerName === excludeName) continue;
+      
+      playerSocket.send(action);
+    }
+  }
 }
 
 module.exports = Room;
