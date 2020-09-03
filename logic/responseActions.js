@@ -12,6 +12,13 @@ class RequestActions {
       payload: null
     });
   }
+
+  sendChatMessage(senderTag, text) {
+    return JSON.stringify({
+      type: 'SEND_CHAT_MESSAGE',
+      payload: {senderTag, text}
+    });
+  }
 }
 
 module.exports = new RequestActions();
