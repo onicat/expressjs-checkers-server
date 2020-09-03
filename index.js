@@ -1,15 +1,18 @@
 /*eslint-disable default-case*/
 
+// debug lib
+const util = require('util');
+
 const express = require('express');
 const app = express();
 const expressWs = require('express-ws')(app);
 
 const port = 3005;
-const Rooms = require('./logic/Rooms');
-const PLAYERS_TAGS = require('./logic/constants');
 const responseActions = require('./logic/responseActions');
+const Room = require('./logic/Room');
+const generateUniqueIdFor = require('./logic/generateUniqueIdFor');
 
-const rooms = new Rooms();
+const rooms = new Map();
 
 app.use((request, response, next) => {
   response.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,32 +20,36 @@ app.use((request, response, next) => {
 });
 
 app.ws('/', function(ws, req) {
+  let room = null;
+  
   ws.addEventListener('message', (msg) => {
     const {type, payload} = JSON.parse(msg.data);
 
     switch (type) {
       case 'CREATE_ROOM': {
-        const room = rooms.createRoom();
+        const roomId = generateUniqueIdFor(rooms);
+        
+        room = new Room(roomId);
+        rooms.set(roomId, room);
 
-        room[PLAYERS_TAGS.PLAYER1] = ws;
-
-        ws.send(responseActions.sendRoomId(room.id));
+        room.addPlayer(payload.initiatorTag, ws);
+        
+        ws.send(responseActions.sendRoomId(roomId));
+        
         break;
       }
 
       case 'JOIN': {
-        const room = rooms.get(payload.id);
+        room = rooms.get(payload.id);
 
-        if (room === undefined || room[PLAYERS_TAGS.PLAYER2] !== null) {
+        if (room === undefined || room.isFull()) {
           ws.close(
             1000,
             'The room with the specified id is full or does not exist'
           )
         } else {
-          room[PLAYERS_TAGS.PLAYER2] = ws;
-
-          room[PLAYERS_TAGS.PLAYER1].send(responseActions.gameReady());
-          room[PLAYERS_TAGS.PLAYER2].send(responseActions.gameReady());
+          room.addPlayer(payload.initiatorTag, ws);
+          room.sendToAllPlayers(responseActions.gameReady());
         }
         
         break;
