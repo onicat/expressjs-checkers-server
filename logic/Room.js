@@ -4,12 +4,12 @@ class Room {
     this.players = new Map();
   }
 
-  addPlayer(name, ws) {
+  addPlayer(playerTag, ws) {
     if (this.isFull()) {
       throw new Error(`Attempt to add a player to a full ${this.id} room`);
     }
 
-    this.players.set(name, ws);
+    this.players.set(playerTag, ws);
   }
 
   isFull() {
@@ -22,9 +22,9 @@ class Room {
     }
   }
 
-  sendToOtherPlayers(excludeName, action) {
-    for (let [playerName, playerSocket] of this.players.entries()) {
-      if (playerName === excludeName) continue;
+  sendToOtherPlayers(excludePlayerTag, action) {
+    for (let [playerTag, playerSocket] of this.players.entries()) {
+      if (playerTag === excludePlayerTag) continue;
       
       playerSocket.send(action);
     }
