@@ -65,6 +65,17 @@ app.ws('/', function(ws, req) {
 
         break;
       }
+
+      case 'GO_TO_WAY': {
+        const excludePlayerTag = payload.initiatorTag;
+        
+        room.sendToOtherPlayers(
+          excludePlayerTag,
+          responseActions.goToWay(payload.initiatorTag, payload.way)
+        );
+
+        break;
+      }
     }
   });
 });
