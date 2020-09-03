@@ -56,8 +56,10 @@ app.ws('/', function(ws, req) {
       }
 
       case 'SEND_CHAT_MESSAGE': {
+        const excludePlayerTag = payload.senderTag;
+        
         room.sendToOtherPlayers(
-          payload.senderTag,
+          excludePlayerTag,
           responseActions.sendChatMessage(payload.senderTag, payload.text)
         );
 
