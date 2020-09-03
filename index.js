@@ -54,6 +54,15 @@ app.ws('/', function(ws, req) {
         
         break;
       }
+
+      case 'SEND_CHAT_MESSAGE': {
+        room.sendToOtherPlayers(
+          payload.senderTag,
+          responseActions.sendChatMessage(payload.senderTag, payload.text)
+        );
+
+        break;
+      }
     }
   });
 });
