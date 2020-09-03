@@ -19,6 +19,13 @@ class RequestActions {
       payload: {senderTag, text}
     });
   }
+
+  goToWay(initiatorTag, way) {
+    return JSON.stringify({
+      type: 'GO_TO_WAY',
+      payload: {initiatorTag, way}
+    });
+  }
 }
 
 module.exports = new RequestActions();
