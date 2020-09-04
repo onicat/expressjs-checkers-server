@@ -19,6 +19,13 @@ app.use((request, response, next) => {
 app.ws('/', function(ws, req) {
   let room = null;
   
+  ws.addEventListener('close', () => {
+    if (room && !room.isEmpty()) {
+      room.disband('One of the players left the game. The room disbanded');
+      rooms.delete(room.id);
+    }
+  });
+
   ws.addEventListener('message', (msg) => {
     const {type, payload} = JSON.parse(msg.data);
 
