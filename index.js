@@ -8,6 +8,7 @@ const port = 3005;
 const responseActions = require('./logic/responseActions');
 const Room = require('./logic/Room');
 const generateUniqueIdFor = require('./logic/generateUniqueIdFor');
+const requestActionTypes = require('./logic/requestActionTypes');
 
 const rooms = new Map();
 
@@ -30,7 +31,7 @@ app.ws('/', function(ws, req) {
     const {type, payload} = JSON.parse(msg.data);
 
     switch (type) {
-      case 'CREATE_ROOM': {
+      case requestActionTypes.CREATE_ROOM: {
         const roomId = generateUniqueIdFor(rooms);
         
         room = new Room(roomId);
@@ -43,7 +44,7 @@ app.ws('/', function(ws, req) {
         break;
       }
 
-      case 'JOIN': {
+      case requestActionTypes.JOIN: {
         const foundRoom = rooms.get(payload.id);
 
         if (foundRoom === undefined || foundRoom.isFull()) {
@@ -61,7 +62,7 @@ app.ws('/', function(ws, req) {
         break;
       }
 
-      case 'SEND_CHAT_MESSAGE': {
+      case requestActionTypes.SEND_CHAT_MESSAGE: {
         const excludePlayerTag = payload.senderTag;
         
         room.sendToOtherPlayers(
@@ -72,7 +73,7 @@ app.ws('/', function(ws, req) {
         break;
       }
 
-      case 'GO_TO_WAY': {
+      case requestActionTypes.GO_TO_WAY: {
         const excludePlayerTag = payload.initiatorTag;
         
         room.sendToOtherPlayers(
