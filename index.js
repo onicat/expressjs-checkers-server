@@ -40,14 +40,16 @@ app.ws('/', function(ws, req) {
       }
 
       case 'JOIN': {
-        room = rooms.get(payload.id);
+        const foundRoom = rooms.get(payload.id);
 
-        if (room === undefined || room.isFull()) {
+        if (foundRoom === undefined || foundRoom.isFull()) {
           ws.close(
             1000,
             'The room with the specified id is full or does not exist'
           )
         } else {
+          room = foundRoom;
+
           room.addPlayer(payload.initiatorTag, ws);
           room.sendToAllPlayers(responseActions.gameReady());
         }
