@@ -39,6 +39,10 @@ class Room {
       this.players.delete(playerTag);
     }
   }
+
+  isEmpty() {
+    return this.players.size === 0;
+  }
 }
 
 module.exports = Room;
