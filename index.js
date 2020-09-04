@@ -1,8 +1,5 @@
 /*eslint-disable default-case*/
 
-// debug lib
-const util = require('util');
-
 const express = require('express');
 const app = express();
 const expressWs = require('express-ws')(app);
