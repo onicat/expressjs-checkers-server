@@ -29,6 +29,16 @@ class Room {
       playerSocket.send(action);
     }
   }
+
+  disband(message = 'The room disbanded. You are disconnected from the server') {
+    for (let [playerTag, playerSocket] of this.players.entries()) {
+      if (playerSocket.readyState < 2) {
+        playerSocket.close(1000, message);
+      }
+
+      this.players.delete(playerTag);
+    }
+  }
 }
 
 module.exports = Room;
